@@ -14,7 +14,8 @@
     "128": "icon-128.png"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "storage"
   ],
   "content_scripts": [
     {
@@ -43,7 +44,8 @@
     {
       "resources": [
         "content.styles.css",
-        "icon-34.png"
+        "icon-34.png",
+        "urls.json"
       ],
       "matches": []
     }

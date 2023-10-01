@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Popup.css';
-import list from '../../assets/img/urls.json'
 import Fuse from 'fuse.js'
 
 const mod = (n, m) => ((n % m) + m) % m;
@@ -13,25 +12,53 @@ const fuseOptions = {
 	]
 };
 
-const fuse = new Fuse(list, fuseOptions);
-
 const Popup = () => {
+  const [list, setList] = useState([]);
   let [search, setSearch] = useState("");
   let [active, setActive] = useState(0);
   let [searchList, setSearchList] = useState(list);
+  const fuse = new Fuse(list, fuseOptions);
+  
+  useEffect(() => {
+    chrome.storage.local.get('urls')
+      .then((res) => {
+        let urls = res.urls;
+        urls.sort((a,b) => a.key < b.key ? -1 : 1);
+        setList(urls);
+        setSearchList(urls);
+      })
+  }, []);
 
   let searchFor = (search) => {
-    setSearch(search)
+    setSearch(search);
+
     if (search === "")
-      setSearchList(list)
-    else
-      setSearchList(fuse.search(search).map((x) => {
-        return {
-          url: x.item.url,
-          icon: x.item.icon,
-          key: x.item.key,
-        }
-      }))
+      setSearchList(list);
+
+    if (search.includes(":")) {
+      const [type, key] = search.split(":", 2);
+      const filteredList = list.filter((a) => a.type.includes(type));
+
+      if (key.length === 0)
+        setSearchList(filteredList);
+      else
+        setSearchList(new Fuse(filteredList, fuseOptions).search(key).map((x) => {
+          return {
+            url: x.item.url,
+            icon: x.item.icon,
+            key: x.item.key,
+          }
+        }));
+    } else {
+        setSearchList(fuse.search(search).map((x) => {
+          return {
+            url: x.item.url,
+            icon: x.item.icon,
+            key: x.item.key,
+          }
+        }));
+    }
+    
   }
 
   let keyDown = (e) => {

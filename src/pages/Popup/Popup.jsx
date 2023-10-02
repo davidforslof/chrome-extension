@@ -9,6 +9,7 @@ const fuseOptions = {
 	keys: [
 		"key",
 		"url",
+    "extra"
 	]
 };
 
@@ -34,8 +35,7 @@ const Popup = () => {
 
     if (search === "")
       setSearchList(list);
-
-    if (search.includes(":")) {
+    else if (search.includes(":")) {
       const [type, key] = search.split(":", 2);
       const filteredList = list.filter((a) => a.type.includes(type));
 
@@ -47,6 +47,7 @@ const Popup = () => {
             url: x.item.url,
             icon: x.item.icon,
             key: x.item.key,
+            extra: x.item.extra,
           }
         }));
     } else {
@@ -55,6 +56,7 @@ const Popup = () => {
             url: x.item.url,
             icon: x.item.icon,
             key: x.item.key,
+            extra: x.item.extra,
           }
         }));
     }
@@ -83,7 +85,10 @@ const Popup = () => {
           {searchList.map((row, i) => (
             <tr key={i} className={i === active ? 'active' : ''}>
               <td><img className='icon' src={row.icon} alt={i}/></td>
-              <td>{row.key}</td>
+              <td>
+                <div>{row.key}</div>
+                <div className="grey">{row.extra}</div>
+              </td>
             </tr>
           ))}
         </tbody>

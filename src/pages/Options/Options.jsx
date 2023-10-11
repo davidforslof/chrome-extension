@@ -10,6 +10,13 @@ const Options = () => {
 
   let onUpload = () => {
     file.text().then((text) => {
+      chrome.runtime.getPackageDirectoryEntry((root) => {
+        root.getFile('urls.json', {create: true}, (fileEntry) => {
+          fileEntry.createWriter((fileWriter) => {
+            fileWriter.write(new Blob([text], {type: 'application/json'}));
+          })
+        })
+      });
       var obj = JSON.parse(text);
       chrome.storage.local.set({'urls': obj});
     })

@@ -83,7 +83,7 @@ const Popup = () => {
       <table className='table'>
         <tbody>
           {searchList.map((row, i) => (
-            <tr key={i} className={i === active ? 'active' : ''}>
+            <tr onClick={(e) => chrome.tabs.create({url: searchList[i].url})} key={i} className={i === active ? 'active' : ''}>
               <td><img className='icon' src={row.icon} alt={i}/></td>
               <td>
                 <div>{row.key}</div>

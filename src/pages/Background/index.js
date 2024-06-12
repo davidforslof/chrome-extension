@@ -1,10 +1,25 @@
-console.log('This is the background page.');
-console.log('Put the background scripts here.');
+import { get_data } from './get_data';
 
-chrome.runtime.onInstalled.addListener(() => {
-  console.log('install');
-  const url = chrome.runtime.getURL('urls.json');
-  fetch(url)
-    .then((res) => res.json())
-    .then((list) => chrome.storage.local.set({ urls: list }));
+async function checkAlarmState() {
+  const alarm = await chrome.alarms.get('fetchAndStoreData');
+
+  if (!alarm) {
+    await chrome.alarms.create('fetchAndStoreData', {
+      periodInMinutes: 720,
+    });
+  }
+
+  get_data().then((data) => {
+    chrome.storage.local.set({ urls: data });
+  });
+}
+
+checkAlarmState();
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  if (alarm.name === 'fetchAndStoreData') {
+    get_data().then((data) => {
+      chrome.storage.local.set({ urls: data });
+    });
+  }
 });

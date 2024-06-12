@@ -164,7 +164,16 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'src/assets/img/icon-128.png',
+          from: 'src/assets/img/tf.png',
+          to: path.join(__dirname, 'build'),
+          force: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'src/assets/img/gh.png',
           to: path.join(__dirname, 'build'),
           force: true,
         },
@@ -178,21 +187,6 @@ var options = {
           force: true,
         },
       ],
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'src/assets/img/urls.json',
-          to: path.join(__dirname, 'build'),
-          force: true,
-        },
-      ],
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'Options', 'index.html'),
-      filename: 'options.html',
-      chunks: ['options'],
-      cache: false,
     }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'src', 'pages', 'Popup', 'index.html'),

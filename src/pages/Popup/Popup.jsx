@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import './Popup.css';
 import Fuse from 'fuse.js'
 
@@ -19,6 +19,8 @@ const Popup = () => {
   let [active, setActive] = useState(0);
   let [searchList, setSearchList] = useState(list);
   const fuse = new Fuse(list, fuseOptions);
+
+  const myRef = useRef(null)
   
   useEffect(() => {
     chrome.storage.local.get('urls')
@@ -64,15 +66,29 @@ const Popup = () => {
   }
 
   let keyDown = (e) => {
-    e.stopPropagation()
+    e.stopPropagation(e.target)
+
+    let newActive = 0
+    
+    if (isNaN(active))
+      setActive(0)
+    
     if (e.key === 'ArrowDown') {
       e.preventDefault()
-      setActive(mod(active + 1, searchList.length))
+      newActive = mod(active + 1, searchList.length)
+      setActive(newActive)
     }
+    
     if (e.key === 'ArrowUp') {
       e.preventDefault()
-      setActive(mod(active - 1, searchList.length))
+      newActive = mod(active - 1, searchList.length)
+      setActive(newActive)
     }
+
+    if (document.getElementById(newActive)) {
+      document.getElementById(newActive).scrollIntoView({block: "center"});
+    };
+
     if (e.key === 'Enter')
       chrome.tabs.create({url: searchList[active].url})
   }
@@ -83,7 +99,7 @@ const Popup = () => {
       <table className='table'>
         <tbody>
           {searchList.map((row, i) => (
-            <tr onClick={(e) => chrome.tabs.create({url: searchList[i].url})} key={i} className={i === active ? 'active' : ''}>
+            <tr id={i} ref={myRef} onClick={(e) => chrome.tabs.create({url: searchList[i].url})} key={i} className={i === active ? 'active' : ''}>
               <td><img className='icon' src={row.icon} alt={i}/></td>
               <td>
                 <div>{row.key}</div>

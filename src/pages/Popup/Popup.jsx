@@ -69,9 +69,15 @@ const Popup = () => {
     e.stopPropagation(e.target)
 
     let newActive = 0
+
+    if (searchList.length === 0)
+      return
+
+    if (active > searchList.length - 1)
+      setActive(0)
     
     if (isNaN(active))
-      setActive(0)
+      setActive(searchList.length -1)
     
     if (e.key === 'ArrowDown') {
       e.preventDefault()
@@ -84,7 +90,7 @@ const Popup = () => {
       newActive = mod(active - 1, searchList.length)
       setActive(newActive)
     }
-
+    
     if (document.getElementById(newActive)) {
       document.getElementById(newActive).scrollIntoView({block: "center"});
     };

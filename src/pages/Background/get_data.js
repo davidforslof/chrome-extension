@@ -53,7 +53,7 @@ async function get_repos() {
       if (diff_years(new Date(), new Date(data.lastUpdated.timestamp)) < 1.5)
         repos.push({
           key: data.name,
-          url: data.html_url,
+          url: `https://github.com/eqtpartners/${data.name}`,
           icon: 'gh.png',
           type: 'gh,git,github',
         });

@@ -10,6 +10,7 @@ async function checkAlarmState() {
   }
 
   get_data().then((data) => {
+    console.log(data);
     chrome.storage.local.set({ urls: data });
   });
 }

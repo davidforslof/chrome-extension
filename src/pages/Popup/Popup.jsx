@@ -25,7 +25,7 @@ const Popup = () => {
   useEffect(() => {
     chrome.storage.local.get('urls')
       .then((res) => {
-        let urls = res.urls;
+        let urls = res.urls ?? [];
         urls.sort((a,b) => a.key < b.key ? -1 : 1);
         setList(urls);
         setSearchList(urls);

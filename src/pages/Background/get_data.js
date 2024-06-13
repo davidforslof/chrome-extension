@@ -72,7 +72,17 @@ async function get_repos() {
 }
 
 export async function get_data() {
-  let repos = await get_repos();
-  let ws = await get_ws();
+  let repos,
+    ws = [];
+  try {
+    repos = await get_repos();
+  } catch (e) {
+    console.log(e);
+  }
+  try {
+    ws = await get_ws();
+  } catch (e) {
+    console.log(e);
+  }
   return [].concat(ws, repos);
 }

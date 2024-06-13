@@ -99,9 +99,16 @@ const Popup = () => {
       chrome.tabs.create({url: searchList[active].url})
   }
 
+  let refresh = () => {
+    chrome.runtime.sendMessage({message: "refresh_data"});
+  }
+
   return (
     <div className="App" onKeyDown={keyDown}>
-      <input type="text" placeholder='Search' className='search' autoFocus value={search} onChange={(e) => searchFor(e.target.value)}/>
+      <div className='flex-container'>
+        <input type="text" placeholder='Search' className='search' autoFocus value={search} onChange={(e) => searchFor(e.target.value)}/>
+        <button onClick={e => refresh()} className='refresh refresh-button'><img alt="refresh" className='refresh' src='refresh.png'/></button>
+      </div>
       <table className='table'>
         <tbody>
           {searchList.map((row, i) => (

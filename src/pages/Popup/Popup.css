@@ -9,8 +9,9 @@
 }
 
 .search {
-  width: -webkit-fill-available;
+  flex-grow: 7;
   font-size: large;
+  align-self: left;
 }
 
 .table {
@@ -41,4 +42,22 @@ tr.active {
 
 .grey {
   color: dimgrey;
+}
+
+.flex-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.refresh {
+  width: 20px;
+}
+
+.refresh-button {
+  background: none;
+  appearance: none;
+  border: none;
+  align-self: flex-end;
+  margin-left: 5px;
+  padding: 0;
 }

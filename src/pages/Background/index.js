@@ -24,3 +24,12 @@ chrome.alarms.onAlarm.addListener((alarm) => {
     });
   }
 });
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.message === 'refresh_data') {
+    get_data().then((data) => {
+      console.log(data);
+      chrome.storage.local.set({ urls: data });
+    });
+  }
+});

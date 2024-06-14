@@ -19,8 +19,16 @@ checkAlarmState();
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'fetchAndStoreData') {
+    if (chrome.storage.local.get('lastRun')) {
+      const lastRun = chrome.storage.local.get('lastRun');
+      const diff = Math.abs(new Date.now() - lastRun);
+      if (diff < 60 * 700) {
+        return;
+      }
+    }
     get_data().then((data) => {
       chrome.storage.local.set({ urls: data });
+      chrome.storage.local.set({ lastRun: new Date.now() });
     });
   }
 });

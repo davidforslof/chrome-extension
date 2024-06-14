@@ -23,6 +23,7 @@ async function get_ws() {
 
     if (!res.links.next) break;
     page += 1;
+    await new Promise((r) => setTimeout(r, 1000));
   }
 
   return ws_ids;
@@ -67,6 +68,7 @@ async function get_repos() {
       break;
 
     page += 1;
+    await new Promise((r) => setTimeout(r, 1000));
   }
   return repos;
 }
@@ -84,5 +86,20 @@ export async function get_data() {
   } catch (e) {
     console.log(e);
   }
+
+  let curr = chrome.storage.local.get('urls');
+
+  if (!curr.urls) {
+    curr.urls = [];
+  }
+
+  if (repos === undefined || repos === null || !repos || repos.length === 0) {
+    repos = curr.urls.filter((x) => x.type.includes('gh'));
+  }
+
+  if (ws === undefined || ws === null || !ws || ws.length === 0) {
+    ws = curr.urls.filter((x) => x.type.includes('tf'));
+  }
+
   return [].concat(ws, repos);
 }
